@@ -1,5 +1,9 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using WorldRpgTool.Domain.Entities;
+using WorldRpgTool.Domain.DTOs;
+using WorldRpgTool.Domain.Managers;
+using WorldRpgTool.Domain.Managers.Interfaces;
 
 namespace WorldRpgTool.Tests
 {
@@ -18,7 +22,7 @@ namespace WorldRpgTool.Tests
             };
 
             IUserManager userManager = new UserManager();
-            var user = userManager.CreateNewUser(userDTO);
+            var user = userManager.Create(userDTO);
 
             Assert.AreEqual(userDTO.Name, user.Name);
             Assert.AreEqual(userDTO.Surname, user.Surname);
@@ -29,7 +33,7 @@ namespace WorldRpgTool.Tests
         [TestMethod]
         public void ShouldEditUser()
         {
-            var userDTO = new UserDTO()
+            var user = new User()
             {
                 Name = "Gilberto",
                 Surname = "Test",
@@ -37,20 +41,20 @@ namespace WorldRpgTool.Tests
                 Password = "ASedsK23%ns@394"
             };
 
+            var userDTO = new UserDTO()
+            {
+                Name = "Fabio",
+                Surname = "another test",
+                Email = "another test"
+            };
+
             IUserManager userManager = new UserManager();
-            var user = userManager.CreateNewUser(userDTO);
-
-            userDTO.Name = "Fabio";
-            userDTO.Surname = "another test";
-            userDTO.Email = "another test";
-            userDTO.Password = "another test";
-
-            var userEdited = userManager.EditUser(user, userDTO);
+            var userEdited = userManager.Edit(user, userDTO);
 
             Assert.AreEqual(userDTO.Name, userEdited.Name);
             Assert.AreEqual(userDTO.Surname, userEdited.Surname);
             Assert.AreEqual(userDTO.Email, userEdited.Email);
-            Assert.AreEqual(userDTO.Password, userEdited.Password);
+            Assert.AreEqual(user.Password, userEdited.Password);
         }
     }
 }
